@@ -13,19 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\01">
-      <UniqueIdentifier>{2ceec468-b0c6-4122-bb5c-40df29096407}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\02">
-      <UniqueIdentifier>{c0282f33-7f1b-4d45-9c47-57831cb7864a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\OneDrive - 교육부\바탕 화면\main_01.cpp">
-      <Filter>소스 파일\01</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일\02</Filter>
+    <ClCompile Include="main_02.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
