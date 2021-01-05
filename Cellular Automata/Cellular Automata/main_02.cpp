@@ -18,6 +18,7 @@ int x, y, cnt, componentcnt;
 char file_buff[101 * 101];
 FILE* fp;
 queue<Node> q;
+vector<Node> v;
 void print_map();
 void Cellular_Automata();
 void push_map();
@@ -25,6 +26,10 @@ void scan_map();
 void ccc();
 void bfs(int x, int y);
 void print_map_num();
+void connect1();
+void connect2();
+void change_boolen();
+
 
 int main() {
 	int hcase, N;
@@ -46,6 +51,15 @@ int main() {
 	}
 	else if (hcase == 2) {
 		scan_map();
+		print_map();
+	}
+	else {
+		scan_map();
+		ccc();
+		print_map_num();
+		connect1();
+		print_map_num();
+		change_boolen();
 		print_map();
 	}
 	printf("세포 자동자 횟수 입력: ");
@@ -131,11 +145,17 @@ void scan_map() {
 }
 
 void ccc() {
+	Node nd;
 	for (int i = 0; i < 100; i++) {
 		for (int j = 0; j < 100; j++) {
 			if (arr[i][j] == 1) printf("■");
 			else printf("□");
-			if (arr[i][j] == 0) bfs(i, j) ;
+			if (arr[i][j] == 0) {
+				bfs(i, j);
+				nd.x = i;
+				nd.y = j;
+				v.push_back(nd);
+			}
 
 		}
 		printf("\n");
@@ -164,4 +184,74 @@ void bfs(int x, int y) {
 		}
 	}
 	componentcnt++;
+}
+
+void connect1() {
+	int vl = v.size();
+	Node st, en;
+	int len,dx,dy;
+	for (int tt = 0; tt < min(3, vl); tt++) {
+		st = v[tt];
+		en = v[tt +1];
+		len = abs(st.x - en.x) + abs(st.y - en.y);
+		if (en.x - st.x < 0) dx = -1;
+		else if (en.x - st.x > 0) dx = 1;
+		else dx = 0;
+		if (en.y - st.y < 0) dy = -1;
+		else if (en.y - st.y > 0) dy = 1;
+		else dy = 0;
+		for (int i = 0; i < len + 2; i++) {
+			if (st.y == en.y && i < len) {
+				st.x += dx;
+			}
+			else if (st.x == en.x && i < len) {
+				st.y += dy;
+			}
+			else if (rand() % 2 == 1) {
+				st.x += dx;
+			}
+			else {
+				st.y += dy;
+			}
+			arr[st.x][st.y] = tt + 2;
+		}
+	}
+	for (int tt = 0; tt < vl - 3; tt++) {
+		st = v[tt];
+		en = v[tt + 3];
+		len = abs(st.x - en.x) + abs(st.y - en.y);
+		if (en.x - st.x < 0) dx = -1;
+		else if (en.x - st.x > 0) dx = 1;
+		else dx = 0;
+		if (en.y - st.y < 0) dy = -1;
+		else if (en.y - st.y > 0) dy = 1;
+		else dy = 0;
+		for (int i = 0; i < len+2; i++) {
+			if (st.y == en.y && i<len) {
+				st.x += dx;
+			}
+			else if (st.x == en.x && i<len) {
+				st.y += dy;
+			}
+			else if (rand() % 2 == 1) {
+				st.x += dx;
+			}
+			else{
+				st.y += dy;
+			}
+			arr[st.x][st.y] = tt+2;
+		}
+	}
+}
+
+void change_boolen() {
+	for (int i = 0; i < 100; i++) {
+		for (int j = 0; j < 100; j++) {
+			if (arr[i][j] != 1) arr[i][j] = 0;
+		}
+	}
+}
+
+void connect2() {
+
 }
