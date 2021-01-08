@@ -24,7 +24,7 @@ vector< pair<Node,Node> > mid_check;
 void print_map();
 void push_map();
 void scan_map();
-void bsp(Node st, Node en);
+void bsp(Node st, Node en,int dis);
 void connect();
 void check_connected();
 
@@ -34,7 +34,7 @@ int main() {
 	Node a, b;
 	a = { 0,0 };
 	b = { 100,100 };
-	bsp(a, b);
+	bsp(a, b, 0);
 	print_map();
 	push_map();
 	printf("\n");
@@ -86,7 +86,7 @@ void scan_map() {
 
 }
 
-void bsp(Node st,Node en) {
+void bsp(Node st,Node en,int dis) {
 	int flag;
 //	printf("%d %d %d %d", st.x, st.y, en.x, en.y);
 	for (int i = st.x; i < en.x; i++) {
@@ -95,9 +95,10 @@ void bsp(Node st,Node en) {
 		}
 	}
 	Node mid;
+	Node nd1, nd2;
 	mid.x = (st.x + en.x) / 2;
 	mid.y = (st.y + en.y) / 2;
-	if (abs(en.x - st.x) * abs(en.y - st.y) < 400) {
+	if (abs(en.x - st.x) * abs(en.y - st.y) < 400 || en.y - st.y < 5 || en.x - st.x < 8) {
 		//for (int i = st.x + 1; i < en.x - 1; i++) {
 		//	for (int j = st.y + 1; j < en.y - 1; j++) {
 		//	//	arr[i][j] = 2;
@@ -108,52 +109,26 @@ void bsp(Node st,Node en) {
 	}
 	else {
 		flag = rand() % 2;
-		if (flag == 0) { //세로로 선 긋기
-			if (en.x - st.x > 6) {
-				mid.x -= 3;
-				mid.x += rand() % 7;
-			}
-			for (int i = st.y; i < en.y; i++) {
-				arr[mid.x][i] = 1;
-			}
+		if (dis< -1 || en.y-st.y<5 || flag == 0) { //세로로 선 긋기
+			if(en.x-st.x>5) mid.x = mid.x + (rand() % 3 - 1) * (en.x - st.x)/10;
+			nd1 = st;
+			nd2 = { mid.x + 1,en.y };
+			bsp(nd1, nd2, dis + 1);
+			nd1 = { mid.x,st.y };
+			nd2 = en;
+			bsp(nd1, nd2, dis + 1);
+			
 		}
-		else {
-			if (en.y - st.y > 6) {
-				mid.y -= 3;
-				mid.y += rand() % 7;
-			}
-			for (int i = st.x; i < en.x; i++) { //가로로 선 긋기
-				arr[i][mid.y] = 1;
-			}
+		else if (dis>1 || en.x - st.x < 5 || flag==1){
+			if (en.y - st.y > 5)mid.y = mid.y + (rand() % 3 - 1) *(en.y - st.y) /10;
+			nd1 = st;
+			nd2 = { en.x,mid.y + 1 };
+			bsp(nd1, nd2, dis -1);
+			nd1 = { st.x,mid.y};
+			nd2 = en;
+			bsp(nd1, nd2, dis -1);
+			
 		}
-		
-
-//		printf(" %d %d\n", mid.x, mid.y);
-		Node nd1, nd2;
-		nd1 = st;
-		nd2 = { mid.x + 1,mid.y + 1 };
-		bsp(nd1, nd2); //좌측상단
-		nd1 = { mid.x,st.y };
-		nd2 = { en.x,mid.y+1 };
-		bsp(nd1, nd2); //좌측하단
-		nd1 = { st.x,mid.y };
-		nd2 = { mid.x+1,en.y};
-		bsp(nd1, nd2); //우측상단
-		nd1 = { mid.x,mid.y};
-		nd2 = en;
-		bsp(nd1, nd2); //우측 하단
-		/*if (flag == 0) {
-			nd1.x = (st.x + mid.x+1) / 2;
-			for (int i = 0; i < 9; i++) {
-				arr[nd1.x + dx[i]][mid.y + dy[i]] = 0;
-			}
-		}
-		else{
-			nd1.y = (st.y + mid.y+1) / 2;
-			for (int i = 0; i < 9; i++) {
-				arr[nd1.x + dx[i]][nd1.y + dy[i]] = 0;
-			}
-		}*/		
 	}
 	return;
 }
