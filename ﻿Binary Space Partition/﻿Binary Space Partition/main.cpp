@@ -27,6 +27,7 @@ void scan_map();
 void bsp(Node st, Node en,int dis);
 void connect();
 void check_connected();
+void opti();
 
 
 int main() {
@@ -39,6 +40,7 @@ int main() {
 	push_map();
 	printf("\n");
 	connect();
+	opti();
 	print_map();
 	return 0;
 }
@@ -98,12 +100,12 @@ void bsp(Node st,Node en,int dis) {
 	Node nd1, nd2;
 	mid.x = (st.x + en.x) / 2;
 	mid.y = (st.y + en.y) / 2;
-	if (abs(en.x - st.x) * abs(en.y - st.y) < 400 || en.y - st.y < 5 || en.x - st.x < 8) {
-		//for (int i = st.x + 1; i < en.x - 1; i++) {
-		//	for (int j = st.y + 1; j < en.y - 1; j++) {
-		//	//	arr[i][j] = 2;
-		//	}
-		//}
+	if (abs(en.x - st.x) * abs(en.y - st.y) < 400 || en.y - st.y < 6 || en.x - st.x < 6) {
+		for (int i = st.x + 1; i < en.x - 1; i++) {
+			for (int j = st.y + 1; j < en.y - 1; j++) {
+				if (i == st.x + 1 || i == en.x - 2 || j == st.y + 1 || j == en.y - 2) arr[i][j] = 1;
+			}
+		}
 		mid_check.push_back({ st,en });
 		return;
 	}
@@ -144,18 +146,17 @@ void connect() {
 		en.x--;
 		en.y--;
 		mid = { (st.x + en.x) / 2,(st.y + en.y) / 2 };
-		
 		if (dis != 0) {
-			arr[st.x][mid.y] = 0;
+			for(int j=0;j<9;j++) arr[st.x+dx[j]][mid.y+dy[j]] = 0;
 		}
 		if (dis != 1) {
-			arr[mid.x][en.y] = 0;
+			for(int j=0;j<9;j++) arr[mid.x+dx[j]][en.y+dy[j]] = 0;
 		}
 		if (dis != 2) {
-			arr[en.x][mid.y] = 0;
+			for(int j=0;j<9;j++) arr[en.x+dx[j]][mid.y+dy[j]] = 0;
 		}
 		if (dis != 3) {
-			arr[mid.x][st.y] = 0;
+			for(int j=0;j<9;j++) arr[mid.x+dx[j]][st.y+dy[j]] = 0;
 		}
 		/*
 		arr[st.x][st.y] = 2;
@@ -189,3 +190,10 @@ void check_connected() {
 	}
 }
 
+void opti() {
+	for (int i = 0; i < 100; i++) {
+		for (int j = 0; j < 100; j++) {
+			if (i == 0 || i == 99 || j == 0 || j == 99 || i == 1 || i == 98 || j == 1 || j == 98) arr[i][j] = 1;
+		}
+	}
+}
