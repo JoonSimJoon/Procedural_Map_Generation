@@ -9,6 +9,7 @@
 #include <string.h>
 #include <queue>
 using namespace std;
+#define Map_Size 100
 struct Node {
 	int x, y;
 };
@@ -34,7 +35,7 @@ int main() {
 	srand(time(NULL));
 	Node a, b;
 	a = { 0,0 };
-	b = { 100,100 };
+	b = { Map_Size,Map_Size };
 	bsp(a, b, 0);
 	print_map();
 	push_map();
@@ -46,8 +47,8 @@ int main() {
 }
 
 void print_map() {
-	for (int i = 0; i < 100; i++) {
-		for (int j = 0; j < 100; j++) {
+	for (int i = 0; i < Map_Size; i++) {
+		for (int j = 0; j < Map_Size; j++) {
 			if (i == 0 || i == 99 || j == 0 || j == 99) arr[i][j] = 1;
 			if (arr[i][j] == 0) printf("бр");
 			else if (arr[i][j] == 1) printf("бс");
@@ -61,9 +62,9 @@ void print_map() {
 
 void push_map() {
 	fp = fopen("test.txt", "w");
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < Map_Size; i++) {
 		memset(file_buff, 0, sizeof(file_buff));
-		for (int j = 0; j < 100; j++) {
+		for (int j = 0; j < Map_Size; j++) {
 			file_buff[strlen(file_buff)] = arr[i][j] + 48;
 		}
 		file_buff[strlen(file_buff)] = '\n';
@@ -78,7 +79,7 @@ void scan_map() {
 	memset(file_buff, 0, sizeof(file_buff));
 	while (fgets(file_buff, sizeof(file_buff), fp) != NULL) {
 		printf("%s", file_buff - 48);
-		for (int j = 0; j < 100; j++) {
+		for (int j = 0; j < Map_Size; j++) {
 			arr[x][j] = file_buff[j] - 48;
 		}
 		x++;
@@ -100,7 +101,7 @@ void bsp(Node st,Node en,int dis) {
 	Node nd1, nd2;
 	mid.x = (st.x + en.x) / 2;
 	mid.y = (st.y + en.y) / 2;
-	if (abs(en.x - st.x) * abs(en.y - st.y) < 400 || en.y - st.y < 6 || en.x - st.x < 6) {
+	if (abs(en.x - st.x) * abs(en.y - st.y) < 400 || (en.y - st.y < 10 && en.x - st.x < 10)) {
 		for (int i = st.x + 1; i < en.x - 1; i++) {
 			for (int j = st.y + 1; j < en.y - 1; j++) {
 				if (i == st.x + 1 || i == en.x - 2 || j == st.y + 1 || j == en.y - 2) arr[i][j] = 1;
@@ -163,10 +164,10 @@ void connect() {
 		arr[st.x][en.y] = 2;
 		arr[en.x][st.y] = 2;
 		arr[en.x][en.y] = 2;
-		arr[st.x][mid.y] = (mid_check[i].first.x+ mid_check[i].first.y)%100;
-		arr[mid.x][en.y] = (mid_check[i].first.x+ mid_check[i].first.y)%100;
-		arr[en.x][mid.y] = (mid_check[i].first.x+ mid_check[i].first.y)%100;
-		arr[mid.x][st.y] = (mid_check[i].first.x+ mid_check[i].first.y)%100;
+		arr[st.x][mid.y] = (mid_check[i].first.x+ mid_check[i].first.y)%Map_Size;
+		arr[mid.x][en.y] = (mid_check[i].first.x+ mid_check[i].first.y)%Map_Size;
+		arr[en.x][mid.y] = (mid_check[i].first.x+ mid_check[i].first.y)%Map_Size;
+		arr[mid.x][st.y] = (mid_check[i].first.x+ mid_check[i].first.y)%Map_Size;
 		arr[mid.x][mid.y] = dis + 10;*/
 	}
 }
@@ -191,8 +192,8 @@ void check_connected() {
 }
 
 void opti() {
-	for (int i = 0; i < 100; i++) {
-		for (int j = 0; j < 100; j++) {
+	for (int i = 0; i < Map_Size; i++) {
+		for (int j = 0; j < Map_Size; j++) {
 			if (i == 0 || i == 99 || j == 0 || j == 99 || i == 1 || i == 98 || j == 1 || j == 98) arr[i][j] = 1;
 		}
 	}
